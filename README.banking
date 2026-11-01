@@ -1,5 +1,4 @@
-# CodeAlpha_Task4_Banking_System
-C++ Banking System/ CodeAlpha C++ Internship - Task 4: Banking System
+
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -17,7 +16,7 @@ string currentTime() {
 // ---------------- Transaction ----------------
 class Transaction {
 public:
-    string type;      // Deposit, Withdraw, Transfer In, Transfer Out
+    string type;        // Deposit, Withdraw, Transfer In, Transfer Out
     double amount;
     double balanceAfter;
     string time;
@@ -42,7 +41,8 @@ private:
 
 public:
     Account(int no, double initial = 0) : accountNumber(no), balance(initial) {
-        if (initial > 0) history.push_back(Transaction("Deposit", initial, balance, "Opening balance"));
+        if (initial > 0)
+            history.push_back(Transaction("Deposit", initial, balance, "Opening balance"));
     }
 
     int getNumber() const { return accountNumber; }
@@ -96,7 +96,8 @@ public:
     void addAccount(const Account &a) { accounts.push_back(a); }
 
     Account *findAccount(int no) {
-        for (auto &a : accounts) if (a.getNumber() == no) return &a;
+        for (auto &a : accounts)
+            if (a.getNumber() == no) return &a;
         return nullptr;
     }
 
@@ -105,7 +106,10 @@ public:
         cout << "ID    : " << customerId << "\n";
         cout << "Name  : " << name << "\n";
         cout << "Phone : " << phone << "\n";
-        for (auto &a : accounts) { cout << "---------------------\n"; a.showInfo(); }
+        for (auto &a : accounts) {
+            cout << "---------------------\n";
+            a.showInfo();
+        }
     }
 };
 
@@ -114,11 +118,12 @@ class Bank {
 private:
     vector<Customer> customers;
     int nextCustomerId = 1001;
-    int nextAccountNo  = 50001;
+    int nextAccountNo = 50001;
 
 public:
     Customer *findCustomer(int id) {
-        for (auto &c : customers) if (c.getId() == id) return &c;
+        for (auto &c : customers)
+            if (c.getId() == id) return &c;
         return nullptr;
     }
 
@@ -134,7 +139,8 @@ public:
         string name, phone;
         double initial;
         cout << "Customer name: ";
-        cin >> ws; getline(cin, name);
+        cin >> ws;
+        getline(cin, name);
         cout << "Phone: ";
         cin >> phone;
         cout << "Opening deposit: ";
@@ -146,15 +152,19 @@ public:
         customers.push_back(c);
         cout << "Customer created! ID: " << nextCustomerId
              << " | Account No: " << nextAccountNo << "\n";
-        nextCustomerId++; nextAccountNo++;
+        nextCustomerId++;
+        nextAccountNo++;
     }
 
     void openExtraAccount() {
-        int id; double initial;
-        cout << "Customer ID: "; cin >> id;
+        int id;
+        double initial;
+        cout << "Customer ID: ";
+        cin >> id;
         Customer *c = findCustomer(id);
         if (!c) { cout << "Customer not found.\n"; return; }
-        cout << "Opening deposit: "; cin >> initial;
+        cout << "Opening deposit: ";
+        cin >> initial;
         if (initial < 0) { cout << "Invalid amount.\n"; return; }
         c->addAccount(Account(nextAccountNo, initial));
         cout << "New account opened: " << nextAccountNo << "\n";
@@ -162,43 +172,60 @@ public:
     }
 
     void deposit() {
-        int no; double amt;
-        cout << "Account No: "; cin >> no;
+        int no;
+        double amt;
+        cout << "Account No: ";
+        cin >> no;
         Account *a = findAccountAnywhere(no);
         if (!a) { cout << "Account not found.\n"; return; }
-        cout << "Amount: "; cin >> amt;
-        if (a->deposit(amt)) cout << "Deposit successful. New balance: " << fixed << setprecision(2) << a->getBalance() << "\n";
-        else cout << "Invalid amount.\n";
+        cout << "Amount: ";
+        cin >> amt;
+        if (a->deposit(amt))
+            cout << "Deposit successful. New balance: " << fixed << setprecision(2) << a->getBalance() << "\n";
+        else
+            cout << "Invalid amount.\n";
     }
 
     void withdraw() {
-        int no; double amt;
-        cout << "Account No: "; cin >> no;
+        int no;
+        double amt;
+        cout << "Account No: ";
+        cin >> no;
         Account *a = findAccountAnywhere(no);
         if (!a) { cout << "Account not found.\n"; return; }
-        cout << "Amount: "; cin >> amt;
-        if (a->withdraw(amt)) cout << "Withdrawal successful. New balance: " << fixed << setprecision(2) << a->getBalance() << "\n";
-        else cout << "Failed: invalid amount or insufficient balance.\n";
+        cout << "Amount: ";
+        cin >> amt;
+        if (a->withdraw(amt))
+            cout << "Withdrawal successful. New balance: " << fixed << setprecision(2) << a->getBalance() << "\n";
+        else
+            cout << "Failed: invalid amount or insufficient balance.\n";
     }
 
     void transfer() {
-        int from, to; double amt;
-        cout << "From Account No: "; cin >> from;
-        cout << "To Account No: ";   cin >> to;
+        int from, to;
+        double amt;
+        cout << "From Account No: ";
+        cin >> from;
+        cout << "To Account No: ";
+        cin >> to;
         if (from == to) { cout << "Cannot transfer to same account.\n"; return; }
         Account *a = findAccountAnywhere(from);
         Account *b = findAccountAnywhere(to);
         if (!a || !b) { cout << "One or both accounts not found.\n"; return; }
-        cout << "Amount: "; cin >> amt;
+        cout << "Amount: ";
+        cin >> amt;
         if (a->withdraw(amt, "To " + to_string(to))) {
             b->deposit(amt, "From " + to_string(from));
             cout << "Transfer successful.\n";
-        } else cout << "Transfer failed: invalid amount or insufficient balance.\n";
+        } else {
+            cout << "Transfer failed: invalid amount or insufficient balance.\n";
+        }
     }
 
     void viewTransactions() {
         int no;
-        cout << "Account No: "; cin >> no;
+        cout << "Account No: ";
+        cin >> no;
         Account *a = findAccountAnywhere(no);
         if (!a) { cout << "Account not found.\n"; return; }
         a->showHistory(5);
@@ -206,7 +233,8 @@ public:
 
     void viewCustomer() {
         int id;
-        cout << "Customer ID: "; cin >> id;
+        cout << "Customer ID: ";
+        cin >> id;
         Customer *c = findCustomer(id);
         if (!c) { cout << "Customer not found.\n"; return; }
         c->showInfo();
@@ -227,18 +255,22 @@ int main() {
         cout << "7. View Customer / Account Info\n";
         cout << "0. Exit\n";
         cout << "Choice: ";
-        if (!(cin >> choice)) { cin.clear(); cin.ignore(1000, '\n'); choice = -1; }
+        if (!(cin >> choice)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            choice = -1;
+        }
         switch (choice) {
-            case 1: bank.createCustomer();     break;
-            case 2: bank.openExtraAccount();   break;
-            case 3: bank.deposit();            break;
-            case 4: bank.withdraw();           break;
-            case 5: bank.transfer();           break;
-            case 6: bank.viewTransactions();   break;
-            case 7: bank.viewCustomer();       break;
+            case 1: bank.createCustomer(); break;
+            case 2: bank.openExtraAccount(); break;
+            case 3: bank.deposit(); break;
+            case 4: bank.withdraw(); break;
+            case 5: bank.transfer(); break;
+            case 6: bank.viewTransactions(); break;
+            case 7: bank.viewCustomer(); break;
             case 0: cout << "Thank you for banking with us!\n"; break;
             default: cout << "Invalid choice.\n";
         }
     } while (choice != 0);
     return 0;
-} Internship Task 4
+}
